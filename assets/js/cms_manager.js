@@ -484,38 +484,33 @@ class CMSManager {
     activateAllImageAreas() {
         console.log('🖼️ 모든 이미지 영역 활성화...');
         
-        // 모든 이미지 트리거 찾기
-        const imageTargets = document.querySelectorAll('.cms-image-trigger');
-        console.log(`발견된 이미지 트리거: ${imageTargets.length}개`);
+        // 모든 이미지 트리거 요소 찾기
+        const imageAreas = document.querySelectorAll('.cms-image-trigger');
         
-        imageTargets.forEach((target, index) => {
+        imageAreas.forEach((area, index) => {
             // 시각적 표시 추가
-            target.style.border = '2px dashed rgba(0, 123, 255, 0.3)';
-            target.style.transition = 'all 0.3s ease';
-            target.setAttribute('title', '클릭하여 이미지 추가/변경');
+            area.style.border = '2px dashed rgba(0, 123, 255, 0.3)';
+            area.style.cursor = 'pointer';
+            area.setAttribute('title', '클릭하여 이미지 추가/변경');
             
             // 호버 효과 추가
-            target.addEventListener('mouseenter', () => {
-                if (this.isAdminMode) {
-                    target.style.borderColor = 'rgba(0, 123, 255, 0.8)';
-                    target.style.backgroundColor = 'rgba(0, 123, 255, 0.1)';
-                }
+            area.addEventListener('mouseenter', () => {
+                area.style.border = '2px dashed rgba(0, 123, 255, 0.6)';
+                area.style.backgroundColor = 'rgba(0, 123, 255, 0.1)';
             });
             
-            target.addEventListener('mouseleave', () => {
-                if (this.isAdminMode) {
-                    target.style.borderColor = 'rgba(0, 123, 255, 0.3)';
-                    target.style.backgroundColor = '';
-                }
+            area.addEventListener('mouseleave', () => {
+                area.style.border = '2px dashed rgba(0, 123, 255, 0.3)';
+                area.style.backgroundColor = '';
             });
             
-            console.log(`이미지 트리거 ${index + 1} 활성화:`, {
-                type: target.dataset.imageType,
-                id: target.dataset.imageId
+            console.log(`이미지 영역 ${index + 1} 활성화:`, {
+                type: area.dataset.imageType,
+                id: area.dataset.imageId
             });
         });
         
-        console.log('✅ 모든 이미지 영역 활성화 완료');
+        console.log(`✅ 총 ${imageAreas.length}개 이미지 영역 활성화 완료`);
     }
     
     updateAdminButton() {
@@ -817,12 +812,13 @@ class CMSManager {
             element.removeAttribute('title');
         });
         
-        // 이미지 영역 하이라이트도 제거
-        const imageTargets = document.querySelectorAll('.cms-image-trigger');
-        imageTargets.forEach(target => {
-            target.style.border = '';
-            target.style.backgroundColor = '';
-            target.removeAttribute('title');
+        // 이미지 영역 스타일 제거
+        const imageAreas = document.querySelectorAll('.cms-image-trigger');
+        imageAreas.forEach(area => {
+            area.style.border = '';
+            area.style.cursor = '';
+            area.style.backgroundColor = '';
+            area.removeAttribute('title');
         });
     }
     
@@ -851,8 +847,8 @@ class CMSManager {
                     <p>Header, Hero, 정책, 면단위 비전에 이미지를 추가하고 관리합니다.</p>
                     <button class="admin-btn" onclick="window.imageManager?.openImageManager()">이미지 관리자 열기</button>
                     <button class="admin-btn" onclick="window.cmsManager.testHeaderImage()">Header 이미지 테스트</button>
-                    <button class="admin-btn" onclick="window.cmsManager.testAllImageTypes()">모든 이미지 영역 테스트</button>
                     <button class="admin-btn" onclick="window.cmsManager.addImagePlaceholders()">이미지 영역 활성화</button>
+                    <button class="admin-btn" onclick="window.cmsManager.debugImageSystem()">이미지 시스템 진단</button>
                 </div>
                 
                 <div class="admin-card settings">
@@ -860,7 +856,6 @@ class CMSManager {
                     <p>관리자 설정 및 백업 관리</p>
                     <button class="admin-btn success" onclick="window.cmsManager.createBackup()">백업 생성</button>
                     <button class="admin-btn warning" onclick="window.imageManager?.exportImages()">이미지 내보내기</button>
-                    <button class="admin-btn" onclick="window.cmsManager.debugImageSystem()">이미지 시스템 진단</button>
                     <button class="admin-btn danger" onclick="window.cmsManager.logout()">로그아웃</button>
                 </div>
             </div>
@@ -871,8 +866,8 @@ class CMSManager {
                     <div class="label">편집 가능한 요소</div>
                 </div>
                 <div class="stat-card">
-                    <div class="number">${this.getImageTriggerCount()}</div>
-                    <div class="label">이미지 영역</div>
+                    <div class="number">${this.getPolicyEditableCount()}</div>
+                    <div class="label">정책 편집 요소</div>
                 </div>
                 <div class="stat-card">
                     <div class="number">${this.getImageCount()}</div>
@@ -887,54 +882,64 @@ class CMSManager {
             <div class="admin-message info">
                 <strong>사용법:</strong><br>
                 • 일반 콘텐츠: 편집하려는 요소를 클릭<br>
-                • 이미지 영역: 파란색 점선 테두리가 있는 영역을 클릭<br>
                 • Header 이미지: Header 상단의 이미지 플레이스홀더 클릭<br>
                 • Hero 이미지: 메인 Hero 섹션의 이미지 플레이스홀더 클릭<br>
                 • 정책 상세: 정책 섹션으로 이동 후 상세보기를 열고 편집<br>
-                • 면단위 비전: 면 이름 카드를 클릭한 후 상세 내용 편집
+                • 면단위 비전: 면 이름 카드를 클릭한 후 상세 내용 편집<br><br>
+                <strong>이미지 업로드 문제 해결:</strong><br>
+                • 이미지 영역을 클릭해도 반응이 없다면 '이미지 시스템 진단' 버튼 클릭<br>
+                • 진단 후에도 문제가 있다면 '이미지 영역 활성화' 버튼 클릭
             </div>
         `;
     }
     
-    // 이미지 시스템 진단
+    // 이미지 시스템 진단 (새로 추가)
     debugImageSystem() {
         console.group('🔍 이미지 시스템 진단');
         
         const imageManager = window.imageManager;
-        const imageTargets = document.querySelectorAll('.cms-image-trigger');
-        const uploadedImages = imageManager ? Object.keys(imageManager.getUploadedImages()).length : 0;
+        const imageAreas = document.querySelectorAll('.cms-image-trigger');
+        const modal = document.getElementById('image-manager-modal');
         
         console.log('이미지 매니저 상태:', {
-            존재: !!imageManager,
-            초기화: imageManager?.isInitialized,
-            업로드된이미지: uploadedImages
+            exists: !!imageManager,
+            initialized: imageManager?.isInitialized,
+            uploadedCount: imageManager ? Object.keys(imageManager.uploadedImages || {}).length : 0
         });
         
-        console.log('이미지 트리거 영역:', imageTargets.length + '개');
-        imageTargets.forEach((target, index) => {
-            console.log(`${index + 1}. 타입: ${target.dataset.imageType}, ID: ${target.dataset.imageId}`);
+        console.log('이미지 영역 상태:', {
+            count: imageAreas.length,
+            areas: Array.from(imageAreas).map(area => ({
+                type: area.dataset.imageType,
+                id: area.dataset.imageId,
+                hasClickHandler: area.onclick !== null
+            }))
         });
         
-        // 이벤트 리스너 테스트
-        console.log('이벤트 리스너 테스트...');
-        if (imageTargets.length > 0) {
-            const testTarget = imageTargets[0];
-            console.log('테스트 대상:', testTarget);
-            
-            // 임시 클릭 이벤트 발생
-            const testEvent = new MouseEvent('click', {
-                bubbles: true,
-                cancelable: true,
-                view: window
-            });
-            
-            console.log('테스트 클릭 이벤트 발생...');
-            testTarget.dispatchEvent(testEvent);
-        }
+        console.log('이미지 모달 상태:', {
+            exists: !!modal,
+            hidden: modal?.classList.contains('hidden')
+        });
         
         console.groupEnd();
         
-        this.showMessage(`이미지 시스템 진단: 매니저=${!!imageManager}, 트리거=${imageTargets.length}개, 이미지=${uploadedImages}개`, 'info');
+        // 문제가 있다면 자동 수정 시도
+        if (!imageManager) {
+            this.showMessage('이미지 매니저가 없습니다. 페이지를 새로고침해주세요.', 'error');
+        } else if (!imageManager.isInitialized) {
+            this.showMessage('이미지 매니저 재초기화를 시도합니다...', 'info');
+            try {
+                imageManager.init();
+                this.showMessage('이미지 매니저 재초기화 완료', 'success');
+            } catch (error) {
+                this.showMessage('이미지 매니저 초기화 실패: ' + error.message, 'error');
+            }
+        } else if (imageAreas.length === 0) {
+            this.showMessage('이미지 영역을 찾을 수 없습니다. 이미지 영역 활성화를 시도합니다...', 'warning');
+            this.addImagePlaceholders();
+        } else {
+            this.showMessage('이미지 시스템이 정상 작동 중입니다.', 'success');
+        }
     }
     
     // Header 이미지 테스트
@@ -950,38 +955,8 @@ class CMSManager {
         }
     }
     
-    // 모든 이미지 타입 테스트
-    testAllImageTypes() {
-        console.log('🎨 모든 이미지 타입 테스트');
-        
-        const imageTypes = [
-            { selector: '.header-top-image .cms-image-trigger', name: 'Header Top' },
-            { selector: '.hero-background .cms-image-trigger', name: 'Hero Background' },
-            { selector: '[data-image-type="candidate"] .cms-image-trigger', name: 'Candidate' },
-            { selector: '[data-image-type="policy-detail"] .cms-image-trigger', name: 'Policy Detail' },
-            { selector: '[data-image-type="vision-detail"] .cms-image-trigger', name: 'Vision Detail' }
-        ];
-        
-        let foundCount = 0;
-        imageTypes.forEach(({ selector, name }) => {
-            const elements = document.querySelectorAll(selector);
-            if (elements.length > 0) {
-                foundCount++;
-                console.log(`✅ ${name}: ${elements.length}개 발견`);
-            } else {
-                console.log(`❌ ${name}: 없음`);
-            }
-        });
-        
-        this.showMessage(`이미지 영역 테스트: ${foundCount}/${imageTypes.length}개 타입 발견`, 'info');
-    }
-    
     getEditableCount() {
         return document.querySelectorAll('[data-editable]').length;
-    }
-    
-    getImageTriggerCount() {
-        return document.querySelectorAll('.cms-image-trigger').length;
     }
     
     getPolicyEditableCount() {
@@ -1040,18 +1015,25 @@ class CMSManager {
             heroSection.insertBefore(heroBackground, heroSection.firstChild);
         }
         
-        // 새로 추가된 이미지 영역들 활성화
-        this.activateAllImageAreas();
-        this.showMessage('이미지 영역이 활성화되었습니다. 파란색 점선 테두리 영역을 클릭하여 이미지를 추가하세요.', 'success');
+        // 관리자 모드가 활성화되어 있다면 이미지 영역들 활성화
+        if (this.isAdminMode) {
+            this.activateAllImageAreas();
+        }
+        
+        this.showMessage('이미지 영역이 활성화되었습니다. 이미지 아이콘을 클릭하여 이미지를 추가하세요.', 'success');
     }
     
     refreshEditableElements() {
         this.makeDynamicContentEditable();
         this.addPolicyEditableAttributes();
         this.highlightEditableElements();
-        this.activateAllImageAreas();
         
-        // PolicyManager가 있다면 편집 속성도 업데이트
+        // 관리자 모드가 활성화되어 있다면 이미지 영역도 활성화
+        if (this.isAdminMode) {
+            this.activateAllImageAreas();
+        }
+        
+        // PolicyManager의 편집 속성도 업데이트
         if (window.PolicyManager && window.PolicyManager.isInitialized) {
             window.PolicyManager.addEditableAttributesToPolicies();
             window.PolicyManager.addEditableAttributesToVisions();
@@ -1128,9 +1110,9 @@ class CMSManager {
         };
         
         const originalHandleImageClick = this.handleImageClick;
-        this.handleImageClick = function(imageElement) {
-            console.log('🐛 handleImageClick 호출:', imageElement);
-            return originalHandleImageClick.call(this, imageElement);
+        this.handleImageClick = function(element) {
+            console.log('🐛 handleImageClick 호출:', element);
+            return originalHandleImageClick.call(this, element);
         };
     }
 }
@@ -1139,7 +1121,7 @@ class CMSManager {
 let cmsManager;
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('CMS 초기화 시작...');
+    console.log('🔧 CMS 초기화 시작...');
     
     // App 초기화를 기다린 후 CMS 초기화 (충돌 방지)
     setTimeout(() => {
@@ -1150,17 +1132,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.CMSManager = CMSManager;
         window.cmsManager = cmsManager;
         
-        // 디버깅 도구
-        window.debugCMS = () => {
-            console.group('🔍 CMS 디버그 정보');
-            console.log('CMS 매니저:', cmsManager);
-            console.log('이미지 매니저:', window.imageManager);
-            console.log('관리자 모드:', cmsManager.isAdminMode);
-            console.log('로그인 상태:', cmsManager.isLoggedIn);
-            console.log('편집 가능한 요소:', document.querySelectorAll('[data-editable]').length + '개');
-            console.log('이미지 트리거:', document.querySelectorAll('.cms-image-trigger').length + '개');
-            console.groupEnd();
-        };
-        
+        console.log('✅ CMS 전역 설정 완료');
     }, 300); // App보다 늦게 초기화
 });

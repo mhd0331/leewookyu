@@ -1,4 +1,4 @@
-// CMS Management System (App.js 충돌 해결 버전)
+// CMS Management System (완전한 수정 버전 - 이미지 첨부 문제 해결)
 class CMSManager {
     constructor() {
         this.isAdminMode = false;
@@ -21,6 +21,8 @@ class CMSManager {
         if (this.isInitialized) return;
         
         try {
+            console.log('🔧 CMS 초기화 시작...');
+            
             // App 초기화 완료를 기다림
             this.waitForAppInitialization();
             
@@ -38,9 +40,9 @@ class CMSManager {
             }
             
             this.isInitialized = true;
-            console.log('CMS 초기화 완료');
+            console.log('✅ CMS 초기화 완료');
         } catch (error) {
-            console.error('CMS 초기화 실패:', error);
+            console.error('❌ CMS 초기화 실패:', error);
         }
     }
     
@@ -158,6 +160,8 @@ class CMSManager {
     }
     
     setupEventListeners() {
+        console.log('🔧 CMS 이벤트 리스너 설정...');
+        
         // Click outside to close modals
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('popup-overlay')) {
@@ -169,41 +173,79 @@ class CMSManager {
             }
         });
         
-        // Editable content click handler - 높은 우선순위로 설정
-        document.addEventListener('click', (e) => {
-            if (!this.isAdminMode) return;
+        // 이미지 클릭 핸들러 (수정됨 - 더 강력한 이벤트 처리)
+        this.setupImageClickHandler();
+        
+        // 편집 가능한 콘텐츠 클릭 핸들러
+        this.setupContentClickHandler();
+        
+        // 키보드 이벤트 핸들러
+        this.setupKeyboardHandler();
+        
+        console.log('✅ CMS 이벤트 리스너 설정 완료');
+    }
+    
+    setupImageClickHandler() {
+        console.log('🖼️ 이미지 클릭 핸들러 설정...');
+        
+        // 이미지 클릭을 위한 전용 핸들러
+        this.imageClickHandler = (e) => {
+            // CMS 모드가 아니면 처리하지 않음
+            if (!this.isAdminMode) {
+                return;
+            }
             
-            const editableElement = e.target.closest('[data-editable]');
-            if (editableElement) {
-                // 이미지 트리거인지 확인 (이미지는 별도 처리)
-                const isImageTrigger = e.target.closest('.cms-image-trigger');
-                if (isImageTrigger) {
-                    return; // 이미지 클릭은 별도 핸들러에서 처리
-                }
+            // cms-image-trigger 클래스를 가진 요소 찾기
+            const imageTarget = e.target.closest('.cms-image-trigger');
+            if (imageTarget) {
+                console.log('🖼️ 이미지 트리거 클릭 감지:', imageTarget);
                 
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('편집 가능한 요소 클릭됨:', editableElement);
-                this.editContent(editableElement);
-                return false;
-            }
-        }, true); // capture phase로 우선 처리
-        
-        // Image click handler
-        document.addEventListener('click', (e) => {
-            if (!this.isAdminMode) return;
-            
-            const imageTarget = e.target.closest('.cms-image-trigger');
-            if (imageTarget) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('이미지 트리거 클릭됨:', imageTarget);
+                e.stopImmediatePropagation();
+                
                 this.handleImageClick(imageTarget);
                 return false;
             }
-        }, true); // capture phase로 우선 처리
+        };
         
-        // Keyboard shortcuts - App.js와 충돌하지 않도록 수정
+        // 캡처 단계에서 이벤트 처리 (최우선)
+        document.addEventListener('click', this.imageClickHandler, true);
+        
+        // 추가로 일반 단계에서도 처리 (이중 보장)
+        document.addEventListener('click', this.imageClickHandler, false);
+        
+        console.log('✅ 이미지 클릭 핸들러 설정 완료');
+    }
+    
+    setupContentClickHandler() {
+        console.log('📝 콘텐츠 클릭 핸들러 설정...');
+        
+        // 편집 가능한 콘텐츠 클릭 처리
+        this.contentClickHandler = (e) => {
+            if (!this.isAdminMode) return;
+            
+            // 이미지 트리거는 별도 처리하므로 제외
+            if (e.target.closest('.cms-image-trigger')) {
+                return;
+            }
+            
+            const editableElement = e.target.closest('[data-editable]');
+            if (editableElement) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('📝 편집 가능한 요소 클릭됨:', editableElement);
+                this.editContent(editableElement);
+                return false;
+            }
+        };
+        
+        document.addEventListener('click', this.contentClickHandler, true);
+        console.log('✅ 콘텐츠 클릭 핸들러 설정 완료');
+    }
+    
+    setupKeyboardHandler() {
+        // 키보드 단축키 처리
         document.addEventListener('keydown', (e) => {
             // CMS 모달이 열려있을 때만 처리
             if (this.editingElement) {
@@ -232,37 +274,60 @@ class CMSManager {
                     return false;
                 }
             }
-            
-            // 그 외에는 App.js가 처리하도록 함
         });
     }
     
-    // 이미지 클릭 핸들러
+    // 이미지 클릭 핸들러 (수정됨)
     handleImageClick(imageElement) {
         const imageType = imageElement.getAttribute('data-image-type');
         const imageId = imageElement.getAttribute('data-image-id');
         
-        console.log('이미지 클릭 처리:', { imageType, imageId });
+        console.log('🖼️ 이미지 클릭 처리:', { 
+            element: imageElement,
+            imageType, 
+            imageId,
+            imageManager: !!window.imageManager
+        });
         
         if (!window.imageManager) {
-            this.showMessage('이미지 매니저를 찾을 수 없습니다.', 'error');
+            this.showMessage('이미지 매니저를 찾을 수 없습니다. 페이지를 새로고침해주세요.', 'error');
+            console.error('❌ 이미지 매니저가 없습니다.');
             return;
         }
         
+        // 이미지 매니저가 초기화되어 있는지 확인
+        if (!window.imageManager.isInitialized) {
+            console.log('🔄 이미지 매니저 재초기화 시도...');
+            try {
+                window.imageManager.init();
+                this.showMessage('이미지 매니저를 재초기화했습니다.', 'info');
+            } catch (error) {
+                console.error('❌ 이미지 매니저 재초기화 실패:', error);
+                this.showMessage('이미지 매니저 초기화 실패: ' + error.message, 'error');
+                return;
+            }
+        }
+        
         // 이미지 매니저에 타입과 ID 정보 전달
-        const editableContainer = imageElement.closest('[data-editable]');
-        if (editableContainer) {
-            // 컨테이너에 이미지 타입 정보 추가
-            editableContainer.setAttribute('data-image-type', imageType);
-            editableContainer.setAttribute('data-image-id', imageId);
-            
+        const editableContainer = imageElement.closest('[data-editable]') || imageElement;
+        
+        // 컨테이너에 이미지 정보 설정
+        editableContainer.setAttribute('data-image-type', imageType);
+        editableContainer.setAttribute('data-image-id', imageId);
+        
+        console.log('🚀 이미지 매니저 호출:', {
+            container: editableContainer,
+            type: imageType,
+            id: imageId
+        });
+        
+        try {
             // 이미지 매니저 열기
             window.imageManager.openImageManager(editableContainer);
-        } else {
-            // 직접 이미지 요소 전달
-            imageElement.setAttribute('data-image-type', imageType);
-            imageElement.setAttribute('data-image-id', imageId);
-            window.imageManager.openImageManager(imageElement);
+            console.log('✅ 이미지 매니저 열기 성공');
+        } catch (error) {
+            console.error('❌ 이미지 매니저 열기 실패:', error);
+            this.showMessage(`이미지 매니저 오류: ${error.message}`, 'error');
         }
     }
     
@@ -372,6 +437,8 @@ class CMSManager {
     }
     
     enableAdminMode() {
+        console.log('🔓 관리자 모드 활성화...');
+        
         this.isAdminMode = true;
         document.body.classList.add('admin-mode');
         
@@ -391,16 +458,21 @@ class CMSManager {
         // Header 이미지 영역 활성화
         this.activateHeaderImageArea();
         
+        // 모든 이미지 영역 활성화
+        this.activateAllImageAreas();
+        
         // CMS 모드 변경 이벤트 발생
         document.dispatchEvent(new CustomEvent('cms-mode-changed', {
             detail: { isAdminMode: true }
         }));
         
-        this.showMessage('관리자 모드가 활성화되었습니다. 모든 요소를 편집할 수 있습니다.', 'success');
-        console.log('관리자 모드 활성화됨');
+        this.showMessage('관리자 모드가 활성화되었습니다. 파란색 영역을 클릭하여 이미지를 추가하고, 텍스트를 클릭하여 편집하세요.', 'success');
+        console.log('✅ 관리자 모드 활성화 완료');
     }
     
     disableAdminMode() {
+        console.log('🔒 관리자 모드 비활성화...');
+        
         this.isAdminMode = false;
         document.body.classList.remove('admin-mode');
         
@@ -418,6 +490,7 @@ class CMSManager {
         }
         
         this.showMessage('관리자 모드가 비활성화되었습니다.', 'info');
+        console.log('✅ 관리자 모드 비활성화 완료');
     }
     
     // Header 이미지 영역 활성화
@@ -426,11 +499,50 @@ class CMSManager {
         if (headerImage) {
             const placeholder = headerImage.querySelector('.image-placeholder');
             if (placeholder) {
-                placeholder.style.border = '2px dashed rgba(255,255,255,0.5)';
+                placeholder.style.border = '3px dashed rgba(0, 123, 255, 0.6)';
+                placeholder.style.cursor = 'pointer';
                 placeholder.setAttribute('title', '클릭하여 헤더 이미지 추가');
+                console.log('📌 Header 이미지 영역 활성화됨');
             }
-            console.log('Header 이미지 영역 활성화됨');
         }
+    }
+    
+    // 모든 이미지 영역 활성화
+    activateAllImageAreas() {
+        console.log('🖼️ 모든 이미지 영역 활성화...');
+        
+        // 모든 이미지 트리거 요소 찾기
+        const imageAreas = document.querySelectorAll('.cms-image-trigger');
+        
+        imageAreas.forEach((area, index) => {
+            // 시각적 표시 추가
+            area.style.border = '3px dashed rgba(0, 123, 255, 0.6)';
+            area.style.cursor = 'pointer';
+            area.style.transition = 'all 0.3s ease';
+            area.setAttribute('title', '클릭하여 이미지 추가/변경');
+            
+            // 호버 효과 추가
+            const originalBorder = area.style.border;
+            
+            area.addEventListener('mouseenter', () => {
+                area.style.border = '3px solid rgba(0, 123, 255, 1)';
+                area.style.backgroundColor = 'rgba(0, 123, 255, 0.1)';
+                area.style.transform = 'scale(1.02)';
+            });
+            
+            area.addEventListener('mouseleave', () => {
+                area.style.border = originalBorder;
+                area.style.backgroundColor = '';
+                area.style.transform = 'scale(1)';
+            });
+            
+            console.log(`이미지 영역 ${index + 1} 활성화:`, {
+                type: area.dataset.imageType,
+                id: area.dataset.imageId
+            });
+        });
+        
+        console.log(`✅ 총 ${imageAreas.length}개 이미지 영역 활성화 완료`);
     }
     
     updateAdminButton() {
@@ -633,8 +745,9 @@ class CMSManager {
         try {
             const contentData = this.extractAllContent();
             localStorage.setItem('cms_content_latest', JSON.stringify(contentData));
+            console.log('💾 CMS 콘텐츠 저장 완료');
         } catch (error) {
-            console.error('저장 실패:', error);
+            console.error('❌ 저장 실패:', error);
             this.showMessage('저장 중 오류가 발생했습니다.', 'error');
         }
     }
@@ -668,17 +781,21 @@ class CMSManager {
                         this.isLoggedIn = true;
                         this.currentUser = loginData.user;
                         this.updateAdminButton();
+                        console.log('✅ 로그인 상태 복원:', loginData.user);
                     } else {
                         sessionStorage.removeItem('cms_login');
+                        console.log('🕐 로그인 세션 만료');
                     }
                 }
             }
         } catch (error) {
-            console.error('로그인 상태 확인 중 오류:', error);
+            console.error('❌ 로그인 상태 확인 중 오류:', error);
         }
     }
     
     makeDynamicContentEditable() {
+        console.log('📝 동적 편집 요소 생성...');
+        
         // 정책 카드들에 편집 속성 추가
         document.querySelectorAll('.policy-card').forEach((card, index) => {
             if (!card.hasAttribute('data-editable')) {
@@ -712,6 +829,8 @@ class CMSManager {
                 }
             }
         });
+        
+        console.log('✅ 동적 편집 요소 생성 완료');
     }
     
     highlightEditableElements() {
@@ -722,7 +841,7 @@ class CMSManager {
             element.setAttribute('title', '클릭하여 편집');
         });
         
-        console.log(`${editableElements.length}개의 편집 가능한 요소를 찾았습니다.`);
+        console.log(`✅ ${editableElements.length}개의 편집 가능한 요소 하이라이트 완료`);
     }
     
     removeEditableHighlight() {
@@ -731,6 +850,18 @@ class CMSManager {
             element.style.cursor = '';
             element.removeAttribute('title');
         });
+        
+        // 이미지 영역 스타일 제거
+        const imageAreas = document.querySelectorAll('.cms-image-trigger');
+        imageAreas.forEach(area => {
+            area.style.border = '';
+            area.style.cursor = '';
+            area.style.backgroundColor = '';
+            area.style.transform = '';
+            area.removeAttribute('title');
+        });
+        
+        console.log('🧹 편집 요소 하이라이트 제거 완료');
     }
     
     renderAdminPanel() {
@@ -759,6 +890,7 @@ class CMSManager {
                     <button class="admin-btn" onclick="window.imageManager?.openImageManager()">이미지 관리자 열기</button>
                     <button class="admin-btn" onclick="window.cmsManager.testHeaderImage()">Header 이미지 테스트</button>
                     <button class="admin-btn" onclick="window.cmsManager.addImagePlaceholders()">이미지 영역 활성화</button>
+                    <button class="admin-btn" onclick="window.cmsManager.debugImageSystem()">이미지 시스템 진단</button>
                 </div>
                 
                 <div class="admin-card settings">
@@ -766,6 +898,7 @@ class CMSManager {
                     <p>관리자 설정 및 백업 관리</p>
                     <button class="admin-btn success" onclick="window.cmsManager.createBackup()">백업 생성</button>
                     <button class="admin-btn warning" onclick="window.imageManager?.exportImages()">이미지 내보내기</button>
+                    <button class="admin-btn" onclick="window.cmsManager.forceImageManagerReset()">이미지 매니저 강제 재설정</button>
                     <button class="admin-btn danger" onclick="window.cmsManager.logout()">로그아웃</button>
                 </div>
             </div>
@@ -784,34 +917,151 @@ class CMSManager {
                     <div class="label">업로드된 이미지</div>
                 </div>
                 <div class="stat-card">
-                    <div class="number">${this.currentUser || '없음'}</div>
-                    <div class="label">현재 사용자</div>
+                    <div class="number">${this.getImageAreaCount()}</div>
+                    <div class="label">이미지 영역</div>
                 </div>
             </div>
             
             <div class="admin-message info">
                 <strong>사용법:</strong><br>
-                • 일반 콘텐츠: 편집하려는 요소를 클릭<br>
-                • Header 이미지: Header 상단의 이미지 플레이스홀더 클릭<br>
-                • Hero 이미지: 메인 Hero 섹션의 이미지 플레이스홀더 클릭<br>
-                • 정책 상세: 정책 섹션으로 이동 후 상세보기를 열고 편집<br>
-                • 면단위 비전: 면 이름 카드를 클릭한 후 상세 내용 편집
+                • <strong>텍스트 편집:</strong> 편집하려는 텍스트 영역을 클릭<br>
+                • <strong>이미지 업로드:</strong> 파란색 점선 영역을 클릭<br>
+                • <strong>정책 상세:</strong> 정책 섹션 → 상세보기 → 이미지/텍스트 편집<br>
+                • <strong>면단위 비전:</strong> 면 이름 버튼 클릭 → 상세 페이지에서 편집<br><br>
+                
+                <strong>문제 해결:</strong><br>
+                • 이미지 업로드가 안 되면: <strong>'이미지 시스템 진단'</strong> 버튼 클릭<br>
+                • 이미지 영역이 안 보이면: <strong>'이미지 영역 활성화'</strong> 버튼 클릭<br>
+                • 모든 것이 안 되면: <strong>'이미지 매니저 강제 재설정'</strong> 버튼 클릭<br>
+                • 그래도 안 되면: 페이지 새로고침 후 다시 로그인
             </div>
         `;
     }
     
+    // 이미지 시스템 진단 (새로 추가)
+    debugImageSystem() {
+        console.group('🔍 이미지 시스템 진단');
+        
+        const imageManager = window.imageManager;
+        const imageAreas = document.querySelectorAll('.cms-image-trigger');
+        const modal = document.getElementById('image-manager-modal');
+        
+        const diagnostic = {
+            imageManager: {
+                exists: !!imageManager,
+                initialized: imageManager?.isInitialized,
+                uploadedCount: imageManager ? Object.keys(imageManager.uploadedImages || {}).length : 0,
+                debugMethod: typeof imageManager?.debug === 'function'
+            },
+            imageAreas: {
+                count: imageAreas.length,
+                areas: Array.from(imageAreas).map(area => ({
+                    type: area.dataset.imageType,
+                    id: area.dataset.imageId,
+                    visible: area.offsetParent !== null,
+                    hasClickHandler: !!area.onclick
+                }))
+            },
+            modal: {
+                exists: !!modal,
+                hidden: modal?.classList.contains('hidden'),
+                parentElement: modal?.parentElement?.tagName
+            },
+            cmsState: {
+                adminMode: this.isAdminMode,
+                loggedIn: this.isLoggedIn,
+                currentUser: this.currentUser
+            }
+        };
+        
+        console.log('진단 결과:', diagnostic);
+        console.groupEnd();
+        
+        // 자동 수정 시도
+        let fixed = [];
+        
+        if (!imageManager) {
+            this.showMessage('❌ 이미지 매니저가 없습니다. 페이지를 새로고침해주세요.', 'error');
+        } else if (!imageManager.isInitialized) {
+            this.showMessage('🔄 이미지 매니저 재초기화를 시도합니다...', 'info');
+            try {
+                imageManager.init();
+                fixed.push('이미지 매니저 재초기화');
+                this.showMessage('✅ 이미지 매니저 재초기화 완료', 'success');
+            } catch (error) {
+                this.showMessage('❌ 이미지 매니저 초기화 실패: ' + error.message, 'error');
+            }
+        }
+        
+        if (imageAreas.length === 0) {
+            this.showMessage('⚠️ 이미지 영역을 찾을 수 없습니다. 이미지 영역 활성화를 시도합니다...', 'warning');
+            this.addImagePlaceholders();
+            fixed.push('이미지 영역 활성화');
+        }
+        
+        if (!modal) {
+            this.showMessage('⚠️ 이미지 모달이 없습니다. 이미지 매니저 강제 재설정을 권장합니다.', 'warning');
+        }
+        
+        if (fixed.length === 0) {
+            this.showMessage('✅ 이미지 시스템이 정상 작동 중입니다.', 'success');
+        } else {
+            this.showMessage(`🔧 수정 완료: ${fixed.join(', ')}`, 'success');
+        }
+        
+        return diagnostic;
+    }
+    
+    // 이미지 매니저 강제 재설정
+    forceImageManagerReset() {
+        console.log('🔄 이미지 매니저 강제 재설정...');
+        
+        try {
+            // 기존 이미지 매니저 제거
+            if (window.imageManager) {
+                window.imageManager = null;
+            }
+            
+            // 기존 모달 제거
+            const existingModal = document.getElementById('image-manager-modal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
+            // 새 이미지 매니저 생성
+            window.imageManager = new window.ImageManager();
+            window.imageManager.init();
+            
+            // 이미지 영역 재활성화
+            if (this.isAdminMode) {
+                this.activateAllImageAreas();
+            }
+            
+            this.showMessage('✅ 이미지 매니저가 강제로 재설정되었습니다.', 'success');
+            console.log('✅ 이미지 매니저 강제 재설정 완료');
+            
+        } catch (error) {
+            console.error('❌ 이미지 매니저 강제 재설정 실패:', error);
+            this.showMessage('❌ 이미지 매니저 재설정 실패: ' + error.message, 'error');
+        }
+    }
+    
     // Header 이미지 테스트
     testHeaderImage() {
+        console.log('🧪 Header 이미지 테스트 실행');
+        
         const headerImage = document.querySelector('.header-top-image .cms-image-trigger');
         if (headerImage && window.imageManager) {
             this.handleImageClick(headerImage);
         } else if (!headerImage) {
-            this.showMessage('Header 이미지 영역을 찾을 수 없습니다.', 'error');
+            this.showMessage('❌ Header 이미지 영역을 찾을 수 없습니다. 이미지 영역 활성화를 시도합니다.', 'error');
+            this.addImagePlaceholders();
         } else {
-            this.showMessage('이미지 매니저를 찾을 수 없습니다.', 'error');
+            this.showMessage('❌ 이미지 매니저를 찾을 수 없습니다.', 'error');
         }
     }
     
+    // 통계 메서드들
     getEditableCount() {
         return document.querySelectorAll('[data-editable]').length;
     }
@@ -820,6 +1070,15 @@ class CMSManager {
         return document.querySelectorAll('.policy-detail [data-editable], .policy-card [data-editable], .vision-button [data-editable]').length;
     }
     
+    getImageCount() {
+        return window.imageManager ? Object.keys(window.imageManager.getUploadedImages()).length : 0;
+    }
+    
+    getImageAreaCount() {
+        return document.querySelectorAll('.cms-image-trigger').length;
+    }
+    
+    // 정책 관련 메서드들
     goToPoliciesAndEdit() {
         // 정책 섹션으로 이동
         if (window.appInstance) {
@@ -849,11 +1108,9 @@ class CMSManager {
         }
     }
     
-    getImageCount() {
-        return window.imageManager ? Object.keys(window.imageManager.getUploadedImages()).length : 0;
-    }
-    
     addImagePlaceholders() {
+        console.log('🖼️ 이미지 플레이스홀더 추가...');
+        
         // Hero section에 이미지 영역이 없다면 추가
         const heroSection = document.querySelector('.hero-section');
         if (heroSection && !heroSection.querySelector('.hero-background')) {
@@ -862,23 +1119,36 @@ class CMSManager {
             heroBackground.setAttribute('data-editable', 'hero-background');
             heroBackground.innerHTML = `
                 <div class="hero-overlay"></div>
-                <div class="image-placeholder cms-image-trigger" data-image-type="hero" data-image-id="hero-background" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.3); text-align: center;">
+                <div class="image-placeholder cms-image-trigger" data-image-type="hero" data-image-id="hero-background" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.3); text-align: center; cursor: pointer;">
                     <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M9,12L11,14.5L15,9.5L20,15H4M2,6H14L16,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6Z"/>
                     </svg>
-                    <p style="margin-top: 0.5rem;">배경 이미지 추가</p>
+                    <p style="margin-top: 0.5rem;">Hero 배경 이미지 추가</p>
                 </div>
             `;
             heroSection.insertBefore(heroBackground, heroSection.firstChild);
+            console.log('✅ Hero 배경 이미지 영역 추가됨');
         }
         
-        this.showMessage('이미지 영역이 활성화되었습니다. 이미지 아이콘을 클릭하여 이미지를 추가하세요.', 'success');
+        // 관리자 모드가 활성화되어 있다면 이미지 영역들 활성화
+        if (this.isAdminMode) {
+            this.activateAllImageAreas();
+        }
+        
+        this.showMessage('이미지 영역이 활성화되었습니다. 파란색 점선 영역을 클릭하여 이미지를 추가하세요.', 'success');
     }
     
     refreshEditableElements() {
+        console.log('🔄 편집 요소 새로고침...');
+        
         this.makeDynamicContentEditable();
         this.addPolicyEditableAttributes();
         this.highlightEditableElements();
+        
+        // 관리자 모드가 활성화되어 있다면 이미지 영역도 활성화
+        if (this.isAdminMode) {
+            this.activateAllImageAreas();
+        }
         
         // PolicyManager의 편집 속성도 업데이트
         if (window.PolicyManager && window.PolicyManager.isInitialized) {
@@ -892,12 +1162,12 @@ class CMSManager {
         }
         
         this.showMessage('편집 요소가 새로고침되었습니다.', 'success');
-        console.log('모든 편집 요소 새로고침 완료');
+        console.log('✅ 모든 편집 요소 새로고침 완료');
     }
     
     addPolicyEditableAttributes() {
-        // 기존 정책 편집 속성 추가 로직
-        console.log('정책 편집 속성 추가 완료');
+        // 정책 편집 속성 추가 (상세 구현은 PolicyManager에서 처리)
+        console.log('📋 정책 편집 속성 추가');
     }
     
     createBackup() {
@@ -906,14 +1176,15 @@ class CMSManager {
             const backupKey = `cms_backup_${new Date().toISOString()}`;
             localStorage.setItem(backupKey, JSON.stringify(content));
             this.showMessage('백업이 생성되었습니다.', 'success');
+            console.log('💾 백업 생성 완료:', backupKey);
         } catch (error) {
-            console.error('백업 실패:', error);
+            console.error('❌ 백업 실패:', error);
             this.showMessage('백업 생성 중 오류가 발생했습니다.', 'error');
         }
     }
     
     showMessage(message, type = 'info') {
-        console.log(`CMS 메시지 [${type}]: ${message}`);
+        console.log(`💬 CMS 메시지 [${type}]: ${message}`);
         
         const messageEl = document.createElement('div');
         messageEl.className = `admin-message ${type}`;
@@ -928,27 +1199,77 @@ class CMSManager {
                 top: 20px;
                 right: 20px;
                 z-index: 10000;
-                max-width: 300px;
+                max-width: 350px;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                padding: 1rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : type === 'warning' ? '#ffc107' : '#17a2b8'};
             `;
             document.body.appendChild(messageEl);
+            
+            // 애니메이션
+            setTimeout(() => messageEl.style.opacity = '1', 10);
         }
         
         setTimeout(() => {
             if (messageEl.parentNode) {
-                messageEl.parentNode.removeChild(messageEl);
+                messageEl.style.opacity = '0';
+                setTimeout(() => {
+                    if (messageEl.parentNode) {
+                        messageEl.parentNode.removeChild(messageEl);
+                    }
+                }, 300);
             }
         }, 5000);
     }
     
     enableDebugLogging() {
-        console.log('CMS 디버그 로깅 활성화');
+        console.log('🐛 CMS 디버그 로깅 활성화');
         
         // 주요 메서드에 로깅 추가
         const originalEditContent = this.editContent;
         this.editContent = function(element) {
             console.log('🐛 editContent 호출:', element);
             return originalEditContent.call(this, element);
+        };
+        
+        const originalHandleImageClick = this.handleImageClick;
+        this.handleImageClick = function(element) {
+            console.log('🐛 handleImageClick 호출:', element);
+            return originalHandleImageClick.call(this, element);
+        };
+    }
+    
+    // 디버깅 도구
+    debug() {
+        console.group('🔍 CMS 매니저 디버그 정보');
+        console.log('초기화 상태:', this.isInitialized);
+        console.log('로그인 상태:', this.isLoggedIn);
+        console.log('관리자 모드:', this.isAdminMode);
+        console.log('현재 사용자:', this.currentUser);
+        console.log('편집 중인 요소:', this.editingElement);
+        
+        const stats = {
+            editableElements: this.getEditableCount(),
+            policyElements: this.getPolicyEditableCount(),
+            imageAreas: this.getImageAreaCount(),
+            uploadedImages: this.getImageCount()
+        };
+        
+        console.log('통계:', stats);
+        console.groupEnd();
+        
+        return {
+            isInitialized: this.isInitialized,
+            isLoggedIn: this.isLoggedIn,
+            isAdminMode: this.isAdminMode,
+            currentUser: this.currentUser,
+            editingElement: this.editingElement,
+            stats: stats
         };
     }
 }
@@ -957,7 +1278,7 @@ class CMSManager {
 let cmsManager;
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('CMS 초기화 시작...');
+    console.log('🔧 CMS DOMContentLoaded 초기화 시작...');
     
     // App 초기화를 기다린 후 CMS 초기화 (충돌 방지)
     setTimeout(() => {
@@ -967,5 +1288,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Global access
         window.CMSManager = CMSManager;
         window.cmsManager = cmsManager;
+        
+        // 디버깅 도구 전역 노출
+        window.debugCMS = () => cmsManager.debug();
+        
+        console.log('✅ CMS 전역 설정 완료');
     }, 300); // App보다 늦게 초기화
 });
