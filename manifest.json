@@ -1,0 +1,258 @@
+{
+  "name": "민주당원 이우규 - 진안군수 후보",
+  "short_name": "이우규",
+  "description": "진안군수 후보 이우규의 공약과 비전을 확인하세요. 이재명과 함께 새로운 시대로",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#1e3c72",
+  "theme_color": "#1e3c72",
+  "categories": ["politics", "government", "news", "social"],
+  "lang": "ko-KR",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  
+  "icons": [
+    {
+      "src": "assets/images/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-monochrome.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "monochrome"
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "assets/images/screenshot-mobile-1.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "홈 화면 - 이우규 후보 소개"
+    },
+    {
+      "src": "assets/images/screenshot-mobile-2.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow", 
+      "label": "공약 페이지 - 6대 비전"
+    },
+    {
+      "src": "assets/images/screenshot-mobile-3.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "면단위 비전 2026"
+    },
+    {
+      "src": "assets/images/screenshot-desktop-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "데스크톱 - 메인 페이지"
+    },
+    {
+      "src": "assets/images/screenshot-desktop-2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "데스크톱 - 공약 상세 페이지"
+    }
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "공약 보기",
+      "short_name": "공약",
+      "description": "이우규 후보의 6대 비전과 면단위 공약을 확인하세요",
+      "url": "/#policies",
+      "icons": [
+        {
+          "src": "assets/images/shortcut-policies.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "후보 소개",
+      "short_name": "소개",
+      "description": "이우규 후보의 경력과 비전을 확인하세요",
+      "url": "/#about",
+      "icons": [
+        {
+          "src": "assets/images/shortcut-about.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "입당 신청",
+      "short_name": "입당",
+      "description": "더불어민주당 온라인 입당 신청",
+      "url": "/#membership",
+      "icons": [
+        {
+          "src": "assets/images/shortcut-membership.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "최신 소식",
+      "short_name": "소식",
+      "description": "이우규 후보의 활동 소식과 일정",
+      "url": "/#news",
+      "icons": [
+        {
+          "src": "assets/images/shortcut-news.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  
+  "share_target": {
+    "action": "/share-target/",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "files",
+          "accept": ["image/*", "text/plain"]
+        }
+      ]
+    }
+  },
+  
+  "protocol_handlers": [
+    {
+      "protocol": "web+leewookyu",
+      "url": "/?action=%s"
+    }
+  ],
+  
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
+  
+  "handle_links": "preferred",
+  
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://leewookyu.com/manifest.json"
+    }
+  ],
+  
+  "file_handlers": [
+    {
+      "action": "/open-policy/",
+      "accept": {
+        "application/json": [".json"],
+        "text/plain": [".txt"]
+      }
+    }
+  ],
+  
+  "widgets": [
+    {
+      "name": "latest-news",
+      "short_name": "소식",
+      "description": "이우규 후보의 최신 소식",
+      "tag": "news-widget",
+      "template": "news-template",
+      "ms_ac_template": "assets/widgets/news-widget.json",
+      "data": "assets/widgets/news-data.json",
+      "type": "application/json",
+      "screenshots": [
+        {
+          "src": "assets/images/widget-news.png",
+          "sizes": "300x200",
+          "label": "뉴스 위젯 스크린샷"
+        }
+      ],
+      "icons": [
+        {
+          "src": "assets/images/widget-icon.png",
+          "sizes": "64x64",
+          "type": "image/png"
+        }
+      ],
+      "auth": false,
+      "update": 3600
+    }
+  ],
+  
+  "capture_links": "existing-client-navigate",
+  
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/images/*",
+        "assets/data/*"
+      ],
+      "matches": ["*"]
+    }
+  ]
+}

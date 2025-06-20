@@ -1,0 +1,784 @@
+/* ===== HEADER TOP IMAGE SECTION (새로 추가) ===== */
+.header-top-image {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.header-top-image .image-placeholder {
+    transition: all 0.3s ease;
+    border-radius: 0 0 10px 10px;
+}
+
+.header-top-image .image-placeholder:hover {
+    transform: scale(1.02);
+    background: rgba(255,255,255,0.2) !important;
+}
+
+.header-top-img {
+    display: block;
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    transition: all 0.3s ease;
+    border-radius: 0 0 10px 10px;
+}
+
+.header-top-img:hover {
+    transform: scale(1.02);
+}
+
+/* Header 스타일 조정 (이미지 지원) */
+.app-header {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    padding: 0 0 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+.header-content {
+    padding: 1rem 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 이미지 관리 모달 스타일 */
+.image-manager-content {
+    max-width: 800px;
+    width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.image-upload-section {
+    margin-bottom: 2rem;
+}
+
+.upload-area {
+    border: 2px dashed #007bff;
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.upload-area:hover,
+.upload-area.drag-over {
+    border-color: #0056b3;
+    background: #e3f2fd;
+    transform: scale(1.02);
+}
+
+.upload-placeholder svg {
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.upload-placeholder p {
+    margin: 0.5rem 0;
+    color: #495057;
+}
+
+.upload-hint {
+    font-size: 0.9rem;
+    color: #6c757d !important;
+}
+
+.upload-preview {
+    margin-top: 1rem;
+}
+
+.upload-preview-item {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.preview-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.file-name {
+    font-weight: 500;
+    color: #212529;
+}
+
+.file-size {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.upload-progress {
+    background: #e9ecef;
+    border-radius: 10px;
+    height: 6px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    height: 100%;
+    width: 100%;
+    animation: progressMove 1.5s ease-in-out;
+}
+
+@keyframes progressMove {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+/* 이미지 갤러리 */
+.image-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.gallery-item {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.gallery-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.gallery-item.selected {
+    ring: 3px solid #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.image-wrapper {
+    position: relative;
+    padding-bottom: 75%; /* 4:3 비율 */
+    overflow: hidden;
+}
+
+.image-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .image-overlay {
+    opacity: 1;
+}
+
+.image-action {
+    background: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.select-btn {
+    color: #007bff;
+}
+
+.select-btn:hover {
+    background: #007bff;
+    color: white;
+}
+
+.delete-btn {
+    color: #dc3545;
+}
+
+.delete-btn:hover {
+    background: #dc3545;
+    color: white;
+}
+
+.image-info {
+    padding: 0.5rem;
+}
+
+.image-name {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #212529;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.image-meta {
+    font-size: 0.7rem;
+    color: #6c757d;
+}
+
+.no-images {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #6c757d;
+    padding: 2rem;
+}
+
+/* 이미지 설정 */
+.image-settings-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* 콘텐츠 이미지 스타일 */
+.content-image-container {
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.content-image-container.position-left {
+    text-align: left;
+}
+
+.content-image-container.position-right {
+    text-align: right;
+}
+
+.content-image-container.position-center {
+    text-align: center;
+}
+
+.content-image {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.content-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.content-image-container.size-small .content-image {
+    max-width: 200px;
+}
+
+.content-image-container.size-medium .content-image {
+    max-width: 400px;
+}
+
+.content-image-container.size-large .content-image {
+    max-width: 600px;
+}
+
+.content-image-container.size-full .content-image {
+    width: 100%;
+    max-width: 100%;
+}
+
+.image-caption {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* ===== ENHANCED HERO SECTION ===== */
+.hero-section {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    margin-bottom: 2rem;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.hero-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.3;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: white;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1;
+}
+
+/* ===== ENHANCED POLICY CARDS (이미지 제거) ===== */
+.policy-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem 1.5rem 1.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.4s ease;
+    border: 1px solid #e9ecef;
+    position: relative;
+    overflow: hidden;
+}
+
+.policy-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+}
+
+.policy-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.policy-card-content {
+    width: 100%;
+}
+
+.policy-card h4 {
+    color: #1e3c72;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.policy-card p {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.detail-button {
+    background: linear-gradient(45deg, #1e3c72, #2a5298);
+    color: white;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-button:hover {
+    transform: translateX(5px);
+    box-shadow: 0 8px 20px rgba(30, 60, 114, 0.3);
+}
+
+.detail-button::after {
+    content: '→';
+    transition: transform 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.detail-button:hover::after {
+    transform: translateX(3px);
+}
+
+/* ===== ENHANCED VISION BUTTONS ===== */
+.vision-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.vision-button {
+    background: linear-gradient(135deg, #20bf6b 0%, #26d0ce 100%);
+    color: white;
+    padding: 1.5rem;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(32, 191, 107, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.vision-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.vision-button:hover::before {
+    left: 100%;
+}
+
+.vision-button:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(32, 191, 107, 0.4);
+}
+
+.vision-button span {
+    position: relative;
+    z-index: 2;
+}
+
+/* ===== POLICY/VISION DETAIL IMAGES ===== */
+.policy-detail-image,
+.vision-detail-image {
+    position: relative;
+    margin-bottom: 2rem;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.policy-detail-image .image-placeholder,
+.vision-detail-image .image-placeholder {
+    transition: all 0.3s ease;
+}
+
+.policy-detail-image .image-placeholder:hover,
+.vision-detail-image .image-placeholder:hover {
+    transform: scale(1.02);
+    background: linear-gradient(135deg, #667eea 20%, #764ba2 80%) !important;
+}
+
+.policy-detail-img,
+.vision-detail-img {
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.policy-detail-img:hover,
+.vision-detail-img:hover {
+    transform: scale(1.02);
+}
+
+/* ===== ENHANCED POLICY DETAIL STYLES ===== */
+.policy-detail {
+    background: #f8f9fa;
+    border-radius: 20px;
+    padding: 2rem;
+    margin-top: 2rem;
+    display: none;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.policy-detail.active {
+    display: block;
+    animation: slideDown 0.4s ease-out;
+}
+
+.policy-detail h4 {
+    color: #1e3c72;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    border-bottom: 3px solid #667eea;
+    padding-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.vision-detail h4 {
+    color: #20bf6b;
+    border-bottom-color: #26d0ce;
+}
+
+/* CMS 모드에서 이미지 트리거 스타일 */
+.admin-mode .cms-image-trigger {
+    border: 2px dashed rgba(0, 123, 255, 0.3) !important;
+    cursor: pointer !important;
+}
+
+.admin-mode .cms-image-trigger:hover {
+    border-color: rgba(0, 123, 255, 0.6) !important;
+    background: rgba(0, 123, 255, 0.1) !important;
+}
+
+.admin-mode .cms-image-trigger::after {
+    content: '이미지 추가/변경';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 123, 255, 0.9);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.admin-mode .cms-image-trigger:hover::after {
+    opacity: 1;
+}
+
+/* ===== RESPONSIVE VISION BUTTONS ===== */
+@media (max-width: 768px) {
+    .vision-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .vision-button {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    
+    .header-top-img {
+        height: 80px;
+    }
+    
+    .header-top-image .image-placeholder {
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .vision-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .vision-button {
+        padding: 1.2rem;
+        font-size: 1.1rem;
+    }
+    
+    .header-top-img {
+        height: 60px;
+    }
+    
+    .header-top-image .image-placeholder {
+        height: 60px;
+    }
+    
+    .image-manager-content {
+        width: 95vw;
+        max-height: 90vh;
+    }
+    
+    .image-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
+
+/* ===== FLOATING ACTION BUTTON ===== */
+.fab-container {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 998;
+}
+
+.fab-button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.fab-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+}
+
+/* ===== ENHANCED ANIMATIONS ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-slide-in-left {
+    animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out forwards;
+}
+
+/* ===== STAGGERED ANIMATIONS ===== */
+.policy-grid .policy-card:nth-child(1) { animation-delay: 0.1s; }
+.policy-grid .policy-card:nth-child(2) { animation-delay: 0.2s; }
+.policy-grid .policy-card:nth-child(3) { animation-delay: 0.3s; }
+.policy-grid .policy-card:nth-child(4) { animation-delay: 0.4s; }
+.policy-grid .policy-card:nth-child(5) { animation-delay: 0.5s; }
+.policy-grid .policy-card:nth-child(6) { animation-delay: 0.6s; }
+
+.vision-grid .vision-card:nth-child(odd) {
+    animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.vision-grid .vision-card:nth-child(even) {
+    animation: slideInRight 0.6s ease-out forwards;
+}
+
+/* ===== RESPONSIVE ENHANCEMENTS ===== */
+@media (max-width: 768px) {
+    .vision-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .vision-card-header {
+        height: 140px;
+    }
+    
+    .vision-card-title {
+        font-size: 1.5rem;
+    }
+    
+    .vision-card-content {
+        padding: 1.5rem;
+    }
+    
+    .fab-container {
+        bottom: 70px;
+        right: 15px;
+    }
+    
+    .fab-button {
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .vision-card-stats {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}

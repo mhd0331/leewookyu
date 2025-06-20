@@ -1,0 +1,862 @@
+/* ===== PWA STYLES ===== */
+
+/* PWA Install Banner */
+.pwa-install-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    padding: 1rem;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    z-index: 1001;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.pwa-install-banner:not(.hidden) {
+    transform: translateY(0);
+}
+
+.install-banner-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.install-banner-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.install-banner-text {
+    flex: 1;
+}
+
+.install-banner-text strong {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+
+.install-banner-text p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.install-banner-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.install-btn {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.install-btn:hover {
+    background: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-2px);
+}
+
+.dismiss-btn {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.dismiss-btn:hover {
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.1);
+}
+
+/* PWA Update Notification */
+.pwa-update-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    z-index: 1002;
+    max-width: 300px;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+}
+
+.pwa-update-notification:not(.hidden) {
+    transform: translateX(0);
+}
+
+.update-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.update-icon {
+    font-size: 1.5rem;
+    animation: spin 2s linear infinite;
+}
+
+.update-text strong {
+    display: block;
+    color: #1e3c72;
+    margin-bottom: 0.25rem;
+}
+
+.update-text p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.update-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.update-btn {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.update-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* Network Status */
+.network-status {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    z-index: 1003;
+    transition: opacity 0.3s ease;
+}
+
+.network-status.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.network-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.network-icon {
+    font-size: 1.2rem;
+}
+
+/* ===== SOCIAL SHARING STYLES ===== */
+
+/* ===== ENHANCED SOCIAL FAB (대폭 확대) ===== */
+.social-fab {
+    position: fixed;
+    bottom: 140px;
+    right: 25px;
+    z-index: 999;
+}
+
+.share-btn-main {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 30%, #f093fb 70%, #f5576c 100%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+    }
+    50% {
+        box-shadow: 0 20px 50px rgba(245, 87, 108, 0.6);
+    }
+}
+
+.share-btn-main::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    transition: left 0.8s ease;
+}
+
+.share-btn-main:hover::before {
+    left: 100%;
+}
+
+.share-btn-main:hover {
+    transform: scale(1.2) rotate(10deg);
+    box-shadow: 0 25px 60px rgba(245, 87, 108, 0.7);
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 30%, #764ba2 70%, #667eea 100%);
+    animation: none;
+}
+
+.share-btn-main:active {
+    transform: scale(1.1) rotate(5deg);
+    transition: all 0.1s ease;
+}
+
+.share-menu {
+    position: absolute;
+    bottom: 95px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 25px;
+    padding: 2rem;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    min-width: 240px;
+    transform: scale(0);
+    transform-origin: bottom right;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255,255,255,0.4);
+}
+
+.share-menu:not(.hidden) {
+    transform: scale(1);
+}
+
+.share-btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.2rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    border: 2px solid transparent;
+}
+
+.share-btn:last-child {
+    margin-bottom: 0;
+}
+
+.share-btn:hover {
+    transform: translateX(8px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: rgba(0,0,0,0.1);
+}
+
+.share-btn svg {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.share-btn:hover svg {
+    transform: scale(1.2) rotate(5deg);
+}
+
+/* 카카오톡 스타일 강화 */
+.share-btn[data-platform="kakao"] {
+    background: linear-gradient(135deg, #FEE500, #FFEB3B);
+    color: #3A1D1D;
+    border: 2px solid #FEE500;
+    font-weight: 700;
+}
+
+.share-btn[data-platform="kakao"]:hover {
+    background: linear-gradient(135deg, #FFEB3B, #FFC107);
+    transform: translateX(8px) scale(1.08);
+    box-shadow: 0 10px 30px rgba(255, 235, 59, 0.5);
+}
+
+.share-btn[data-platform="facebook"]:hover {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    box-shadow: 0 8px 25px rgba(24, 119, 242, 0.3);
+}
+
+.share-btn[data-platform="twitter"]:hover {
+    background: linear-gradient(135deg, #e1f5fe, #b3e5fc);
+    box-shadow: 0 8px 25px rgba(29, 161, 242, 0.3);
+}
+
+.share-btn[data-platform="copy"]:hover {
+    background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+    box-shadow: 0 8px 25px rgba(156, 39, 176, 0.3);
+}
+
+.share-menu {
+    position: absolute;
+    bottom: 85px;
+    right: 0;
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    min-width: 200px;
+    transform: scale(0);
+    transform-origin: bottom right;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.share-menu:not(.hidden) {
+    transform: scale(1);
+}
+
+.share-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.share-btn:last-child {
+    margin-bottom: 0;
+}
+
+.share-btn:hover {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.share-btn svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.share-btn:hover svg {
+    transform: scale(1.1);
+}
+
+/* 카카오톡 스타일 강화 */
+.share-btn[data-platform="kakao"] {
+    background: linear-gradient(135deg, #FEE500, #FFEB3B);
+    color: #3A1D1D;
+    border: 1px solid #FEE500;
+}
+
+.share-btn[data-platform="kakao"]:hover {
+    background: linear-gradient(135deg, #FFEB3B, #FFC107);
+    transform: translateX(5px) scale(1.02);
+}
+
+.share-btn[data-platform="facebook"]:hover {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+}
+
+.share-btn[data-platform="twitter"]:hover {
+    background: linear-gradient(135deg, #e1f5fe, #b3e5fc);
+}
+
+.share-btn[data-platform="copy"]:hover {
+    background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+}
+
+/* Section Share Buttons */
+.section-share {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.share-section-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.share-section-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+}
+
+/* Hero Actions */
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-button.secondary {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.cta-button.secondary:hover {
+    box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* SNS Follow Section */
+.sns-follow-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem;
+    border-radius: 20px;
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.sns-follow-section h3 {
+    color: white !important;
+    margin-bottom: 1.5rem;
+}
+
+.sns-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.sns-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+.sns-button:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.1);
+    text-decoration: none;
+    color: white;
+}
+
+.sns-button.facebook {
+    background: rgba(24, 119, 242, 0.2);
+}
+
+.sns-button.instagram {
+    background: rgba(225, 48, 108, 0.2);
+}
+
+.sns-button.youtube {
+    background: rgba(255, 0, 0, 0.2);
+}
+
+/* Share Modal */
+.share-modal-content {
+    max-width: 400px;
+    width: 90vw;
+}
+
+.share-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.share-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 15px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.share-option:hover {
+    border-color: #007bff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.share-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f8f9fa;
+}
+
+.share-option span {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+@media (max-width: 768px) {
+    .pwa-install-banner {
+        padding: 0.8rem;
+    }
+    
+    .install-banner-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+    }
+    
+    .install-banner-actions {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .install-btn,
+    .dismiss-btn {
+        flex: 1;
+        max-width: 120px;
+    }
+    
+    .pwa-update-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        transform: translateY(-200px);
+    }
+    
+    .pwa-update-notification:not(.hidden) {
+        transform: translateY(0);
+    }
+    
+    .update-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+    }
+    
+    .update-actions {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .social-fab {
+        bottom: 120px;
+        right: 20px;
+    }
+    
+    .share-btn-main {
+        width: 75px;
+        height: 75px;
+    }
+    
+    .share-menu {
+        bottom: 90px;
+        min-width: 220px;
+        right: -15px;
+    }
+    
+    .share-btn {
+        padding: 1.1rem;
+        font-size: 1.05rem;
+    }
+    
+    .sns-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    
+    .sns-button {
+        width: 100%;
+        max-width: 250px;
+        justify-content: center;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cta-button.secondary {
+        margin-left: 0 !important;
+        margin-top: 1rem;
+    }
+    
+    .share-options {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .share-option {
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+    }
+    
+    .share-icon {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .install-banner-content {
+        padding: 0;
+    }
+    
+    .install-banner-text strong {
+        font-size: 1rem;
+    }
+    
+    .install-banner-text p {
+        font-size: 0.8rem;
+    }
+    
+    .install-btn,
+    .dismiss-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .sns-follow-section {
+        padding: 1.5rem 1rem;
+    }
+    
+    .section-share {
+        margin-bottom: 1rem;
+    }
+    
+    .share-section-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.8rem;
+    }
+    
+    .social-fab {
+        bottom: 110px;
+        right: 15px;
+    }
+    
+    .share-btn-main {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .share-menu {
+        bottom: 85px;
+        min-width: 200px;
+        padding: 1.5rem;
+        right: -10px;
+    }
+    
+    .share-btn {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .install-banner-content {
+        padding: 0;
+    }
+    
+    .install-banner-text strong {
+        font-size: 1rem;
+    }
+    
+    .install-banner-text p {
+        font-size: 0.8rem;
+    }
+    
+    .install-btn,
+    .dismiss-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .sns-follow-section {
+        padding: 1.5rem 1rem;
+    }
+    
+    .section-share {
+        margin-bottom: 1rem;
+    }
+    
+    .share-section-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes slideInFromBottom {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.animate-slide-in-bottom {
+    animation: slideInFromBottom 0.4s ease-out;
+}
+
+.animate-slide-in-right {
+    animation: slideInFromRight 0.3s ease-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+/* ===== ACCESSIBILITY ===== */
+
+@media (prefers-reduced-motion: reduce) {
+    .share-btn-main:hover {
+        transform: scale(1.05);
+    }
+    
+    .share-btn:hover {
+        transform: none;
+    }
+    
+    .share-section-btn:hover {
+        transform: none;
+    }
+    
+    .sns-button:hover {
+        transform: none;
+    }
+    
+    .share-option:hover {
+        transform: none;
+    }
+    
+    .update-icon {
+        animation: none;
+    }
+}
+
+/* ===== HIGH CONTRAST MODE ===== */
+
+@media (prefers-contrast: high) {
+    .pwa-install-banner {
+        background: #000;
+        border-top: 2px solid #fff;
+    }
+    
+    .share-btn-main {
+        background: #000;
+        border: 2px solid #fff;
+    }
+    
+    .share-menu {
+        border: 2px solid #000;
+    }
+    
+    .share-option {
+        border-color: #000;
+    }
+    
+    .share-option:hover {
+        background: #f0f0f0;
+    }
+}
